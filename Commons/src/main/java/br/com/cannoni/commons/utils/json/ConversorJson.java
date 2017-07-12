@@ -1,6 +1,5 @@
 package br.com.cannoni.commons.utils.json;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -49,7 +48,7 @@ public class ConversorJson<T extends Object> {
 	 * @return List<T>
 	 */
 	@SuppressWarnings("unchecked")
-	public List<T> conveterJsonParaLista(String jsonString, Class<T> clazz) {
+	public List<T> conveterJsonParaLista(String jsonString, Class<T> clazz) throws Exception {
 		List<T> listaRetorno = new ArrayList<T>();
 
 		Gson gson = new Gson();
@@ -58,21 +57,9 @@ public class ConversorJson<T extends Object> {
 		List<T> listaGson = gson.fromJson(jsonString, typeToken.getType());
 
 		for (Object elemento : listaGson) {
-			try {
-				T instancia = clazz.newInstance();
-				BeanUtils.populate(instancia, (Map<String, Object>) elemento);
-				listaRetorno.add(instancia);
-
-			} catch (InstantiationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			T instancia = clazz.newInstance();
+			BeanUtils.populate(instancia, (Map<String, Object>) elemento);
+			listaRetorno.add(instancia);
 		}
 
 		return listaRetorno;
